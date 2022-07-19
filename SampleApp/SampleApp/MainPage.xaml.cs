@@ -50,13 +50,18 @@ namespace SampleApp
                 appId = "ios:com.socketmobile.multiplatformtest";
                 developerId = "ec9e1b16-c5ae-ec11-983e-000d3a5bbc61";
                 appKey = "MC0CFQCmP6oKJtSK5RXgIpPBUhXsjg63rwIUbS8tmz3f2JpdoNjfhHWGmjv5+AI=";
-
             }
             if (Device.RuntimePlatform == Device.Android)
             {
                 appId = "android:com.socketmobile.multiplatformtest.android";
                 developerId = "ec9e1b16-c5ae-ec11-983e-000d3a5bbc61";
                 appKey = "MCwCFBOpqbd3TEZivPYJ2oKHKASgPD+yAhRVLLyX/+yQpa3LXAMC+MpgiwdXsA==";
+            }
+            if (Device.RuntimePlatform == Device.UWP)
+            {
+                appId = "windows:com.socketmobile.multiplatformtest.windows";
+                developerId = "ec9e1b16-c5ae-ec11-983e-000d3a5bbc61";
+                appKey = "MCwCFAc20rtTcO+lDlodlK/+LVvx+plcAhQpDPwo3SyqMWdm4NbUBWAd5IRv/A==";
             }
 
             capture.OpenAsync(appId, developerId, appKey)
