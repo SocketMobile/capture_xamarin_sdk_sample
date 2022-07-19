@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.iOS", "SampleApp\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleApp", "SampleApp\SampleApp\SampleApp.csproj", "{7C9B0C45-6F92-45A7-9F24-0ED378AA5336}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.Windows", "SampleApp\SampleApp.WIndows\SampleApp.Windows.csproj", "{2EB4C2FA-86D4-4453-9579-15FC301DB696}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleApp.Windows", "SampleApp\SampleApp.Windows\SampleApp.Windows.csproj", "{2EB4C2FA-86D4-4453-9579-15FC301DB696}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
