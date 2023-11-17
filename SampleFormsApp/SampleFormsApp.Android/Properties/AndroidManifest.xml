@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.socketmobile.multiplatformtest.android">
+	<uses-sdk android:minSdkVersion="22" android:targetSdkVersion="30" />
+	<application android:label="SampleFormsApp.Android" android:networkSecurityConfig="@xml/network_security_config" android:theme="@style/MainTheme">
+		<meta-data android:name="com.socketmobile.capture.APP_KEY" android:value="User App Key" />
+		<meta-data android:name="com.socketmobile.capture.DEVELOPER_ID" android:value="User Developer ID" />
+	</application>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+</manifest>
