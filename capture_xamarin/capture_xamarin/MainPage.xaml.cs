@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using capture_xamarin_sdk_sample.Model;
 using SocketMobile.Capture;
@@ -17,6 +18,12 @@ namespace capture_xamarin_sdk_sample
         public static ObservableCollection<StoredDevice> deviceListItems = new ObservableCollection<StoredDevice>();
 
         public static CaptureHelperDevice selectedDevice;
+
+        string appId = "";
+        string developerId = "";
+        string appKey = "";
+
+        private bool isFirstLaunch = true;
 
         private string _selectedDeviceText = $"Selected Device for Trigger Scan Button: ";
         public string SelectedDeviceText
@@ -97,10 +104,6 @@ namespace capture_xamarin_sdk_sample
         {
             InitializeComponent();
 
-            string appId = "";
-            string developerId = "";
-            string appKey = "";
-
             switchLabel.BindingContext = this;
             selectedDeviceText.BindingContext = this;
             deviceList.BindingContext = this;
@@ -140,21 +143,72 @@ namespace capture_xamarin_sdk_sample
             }
             else
             {
-                capture.OpenAsync(appId, developerId, appKey)
-            .ContinueWith(result =>
+                // (Android only) use to check and start (if not running already) the Android Service
+                //AndroidService().ContinueWith(res =>
+                //{
+                // Place Open() here and remove from below
+                //});
+
+                Open();
+            }
+        }
+
+        public void Open()
+        {
+            capture.OpenAsync(appId, developerId, appKey)
+                .ContinueWith(result =>
+                {
+                    System.Diagnostics.Debug.Print("Open Capture returns {0}", result.Result);
+                    if (SktErrors.SKTSUCCESS(result.Result))
+                    {
+                        if (isFirstLaunch)
+                        {
+                            capture.DeviceArrival += Capture_DeviceArrival;
+                            capture.DeviceRemoval += Capture_DeviceRemoval;
+                            capture.DecodedData += Capture_DecodedData;
+
+                            // (Android-iOS) Check if SocketCam is enabled to set the Switch
+                            GetSocketCamStatusInit();
+                        }
+                    }
+                });
+        }
+
+        // (Android only) re-enable communication with the Service after comming back from deep sleep mode
+        public void ReEnableConnection()
+        {
+            // List will be repopulated on OpenAsync()
+            deviceListItems.Clear();
+
+            capture.CloseAsync().ContinueWith(result =>
             {
-                System.Diagnostics.Debug.Print("Open Capture returns {0}", result.Result);
                 if (SktErrors.SKTSUCCESS(result.Result))
                 {
-                    capture.DeviceArrival += Capture_DeviceArrival;
-                    capture.DeviceRemoval += Capture_DeviceRemoval; ;
-                    capture.DecodedData += Capture_DecodedData;
-
-                    // (Android-iOS) Check if SocketCam is enabled to set the Switch
-                    GetSocketCamStatusInit();
+                    isFirstLaunch = false;
+                    Open();
                 }
             });
+        }
+
+        // (Android only) Check if Android Service is installed and running. If it is not running then starts the Service
+        private async Task AndroidService()
+        {
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                switch (capture.IsAndroidServiceInstalled())
+                {
+                    case true:
+                        if (capture.IsAndroidServiceRunning() == false) capture.StartAndroidService();
+                        break;
+
+                    case false:
+                        // Make sure that Companion is installed 
+                        break;
+
+                }
             }
+            // Add time to let the Service start
+            await Task.Delay(1000);
         }
 
         // Device Events--

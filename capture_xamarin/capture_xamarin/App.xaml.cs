@@ -6,11 +6,13 @@ namespace capture_xamarin_sdk_sample
 {
     public partial class App : Application
     {
+        MainPage rootPage;
         public App()
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            rootPage = new MainPage();
+            MainPage = rootPage;
         }
 
         protected override void OnStart()
@@ -23,6 +25,11 @@ namespace capture_xamarin_sdk_sample
 
         protected override void OnResume()
         {
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                // (Android only) Re-enable communication with the Service after comming back from deep sleep mode
+                rootPage.ReEnableConnection();
+            }
         }
     }
 }
