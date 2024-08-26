@@ -28,7 +28,8 @@ namespace capture_xamarin_sdk_sample
             if (Device.RuntimePlatform == Device.Android)
             {
                 // (Android only) Re-enable communication with the Service after comming back from deep sleep mode
-                rootPage.ReEnableConnection();
+                // Not compatible with SocketCam
+                //rootPage.ReEnableConnection();
             }
         }
     }

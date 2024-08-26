@@ -88,16 +88,7 @@ namespace capture_xamarin_sdk_sample.Droid
 			global::SocketMobile.Capture.Resource.Layout.socketcam_barcode_scanner = global::capture_xamarin_sdk_sample.Droid.Resource.Layout.socketcam_barcode_scanner;
 			global::SocketMobile.Capture.Resource.Layout.socketcam_capture = global::capture_xamarin_sdk_sample.Droid.Resource.Layout.socketcam_capture;
 			global::SocketMobile.Capture.Resource.Menu.upgrade_socketcam_c820_menu = global::capture_xamarin_sdk_sample.Droid.Resource.Menu.upgrade_socketcam_c820_menu;
-			global::SocketMobile.Capture.Resource.Raw.ch_ppocr_mobile_v2_0_cls_slim_opt = global::capture_xamarin_sdk_sample.Droid.Resource.Raw.ch_ppocr_mobile_v2_0_cls_slim_opt;
-			global::SocketMobile.Capture.Resource.Raw.ch_ppocr_mobile_v3_0_det_slim_opt = global::capture_xamarin_sdk_sample.Droid.Resource.Raw.ch_ppocr_mobile_v3_0_det_slim_opt;
-			global::SocketMobile.Capture.Resource.Raw.ch_ppocr_mobile_v3_0_rec_slim_opt = global::capture_xamarin_sdk_sample.Droid.Resource.Raw.ch_ppocr_mobile_v3_0_rec_slim_opt;
-			global::SocketMobile.Capture.Resource.Raw.config_file = global::capture_xamarin_sdk_sample.Droid.Resource.Raw.config_file;
-			global::SocketMobile.Capture.Resource.Raw.euro = global::capture_xamarin_sdk_sample.Droid.Resource.Raw.euro;
-			global::SocketMobile.Capture.Resource.Raw.euro_symbol = global::capture_xamarin_sdk_sample.Droid.Resource.Raw.euro_symbol;
 			global::SocketMobile.Capture.Resource.Raw.hsm_beep = global::capture_xamarin_sdk_sample.Droid.Resource.Raw.hsm_beep;
-			global::SocketMobile.Capture.Resource.Raw.pound = global::capture_xamarin_sdk_sample.Droid.Resource.Raw.pound;
-			global::SocketMobile.Capture.Resource.Raw.pound_symbol = global::capture_xamarin_sdk_sample.Droid.Resource.Raw.pound_symbol;
-			global::SocketMobile.Capture.Resource.Raw.ppocr_keys_v1 = global::capture_xamarin_sdk_sample.Droid.Resource.Raw.ppocr_keys_v1;
 			global::SocketMobile.Capture.Resource.Raw.socketcam_beep = global::capture_xamarin_sdk_sample.Droid.Resource.Raw.socketcam_beep;
 			global::SocketMobile.Capture.Resource.String.app_name = global::capture_xamarin_sdk_sample.Droid.Resource.String.app_name;
 			global::SocketMobile.Capture.Resource.String.cancel = global::capture_xamarin_sdk_sample.Droid.Resource.String.cancel;
@@ -19123,37 +19114,10 @@ namespace capture_xamarin_sdk_sample.Droid
 		{
 			
 			// aapt resource value: 0x7F0F0000
-			public const int ch_ppocr_mobile_v2_0_cls_slim_opt = 2131689472;
+			public const int hsm_beep = 2131689472;
 			
 			// aapt resource value: 0x7F0F0001
-			public const int ch_ppocr_mobile_v3_0_det_slim_opt = 2131689473;
-			
-			// aapt resource value: 0x7F0F0002
-			public const int ch_ppocr_mobile_v3_0_rec_slim_opt = 2131689474;
-			
-			// aapt resource value: 0x7F0F0003
-			public const int config_file = 2131689475;
-			
-			// aapt resource value: 0x7F0F0004
-			public const int euro = 2131689476;
-			
-			// aapt resource value: 0x7F0F0005
-			public const int euro_symbol = 2131689477;
-			
-			// aapt resource value: 0x7F0F0006
-			public const int hsm_beep = 2131689478;
-			
-			// aapt resource value: 0x7F0F0007
-			public const int pound = 2131689479;
-			
-			// aapt resource value: 0x7F0F0008
-			public const int pound_symbol = 2131689480;
-			
-			// aapt resource value: 0x7F0F0009
-			public const int ppocr_keys_v1 = 2131689481;
-			
-			// aapt resource value: 0x7F0F000A
-			public const int socketcam_beep = 2131689482;
+			public const int socketcam_beep = 2131689473;
 			
 			static Raw()
 			{

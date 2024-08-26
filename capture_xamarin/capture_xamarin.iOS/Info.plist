@@ -44,5 +44,7 @@
 	<string>Bluetooth is required for connecting to a barcode scanner</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Using the device camera to scan a barcode</string>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<true/>
 </dict>
 </plist>

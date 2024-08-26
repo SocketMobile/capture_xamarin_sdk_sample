@@ -15,8 +15,8 @@ namespace capture_xamarin_sdk_sample.Droid
         {
             base.OnCreate(savedInstanceState);
 
-            CaptureHelper capture = new CaptureHelper();
-            capture.SetAndroidContext(this);
+            // Set to use Android Service Methods
+            CaptureHelper.SetAndroidServiceContext(this);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);

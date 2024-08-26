@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -22,12 +23,31 @@ namespace capture_xamarin_sdk_sample.Windows
     /// </summary>
     public sealed partial class MainPage
     {
+        public static Window appContext;
         public MainPage()
         {
             this.InitializeComponent();
 
+            appContext = Window.Current;
+
             LoadApplication(new capture_xamarin_sdk_sample.App());
 
         }
+
+        public async static void DisplayUserControlView(UserControl userControl)
+        {
+            await appContext.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+            {
+                // Handle closing the UI element:
+                // Close button will trigger Capture's DecodedData event with a result of SktErrors.ESKT_CANCEL
+                Popup pop = new Popup();
+                userControl.Width = 250;
+                userControl.Height = 250;
+                pop.Child = userControl;
+                pop.IsOpen = true;
+            });
+        }
     }
+
+
 }

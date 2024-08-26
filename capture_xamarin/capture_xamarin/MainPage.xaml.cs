@@ -167,6 +167,16 @@ namespace capture_xamarin_sdk_sample
                             capture.DeviceRemoval += Capture_DeviceRemoval;
                             capture.DecodedData += Capture_DecodedData;
 
+                            // Start CaptureExtension to gain access to SocketCam device
+                            if (Device.RuntimePlatform == Device.Android)
+                            {
+                                DependencyService.Get<IAndroidCaptureExtensionInit>().CallAndroidCaptureExtensionInit(capture.GetHandle());
+                            }
+                            else if (Device.RuntimePlatform == Device.UWP)
+                            {
+                                DependencyService.Get<IWindowsCaptureExtension>().CallWindowsCaptureExtensionInit(capture.GetHandle(), appId, developerId, appKey);
+                            }
+
                             // (Android-iOS) Check if SocketCam is enabled to set the Switch
                             GetSocketCamStatusInit();
                         }
@@ -175,6 +185,7 @@ namespace capture_xamarin_sdk_sample
         }
 
         // (Android only) re-enable communication with the Service after comming back from deep sleep mode
+        // Not compatible with SocketCam
         public void ReEnableConnection()
         {
             // List will be repopulated on OpenAsync()
@@ -254,18 +265,6 @@ namespace capture_xamarin_sdk_sample
 
             // Last device arrival is the new selected device
             selectedDevice = e.CaptureDevice;
-
-            // Set SocketCam Overlay to display camera
-
-        if (selectedDevice.GetDeviceInfo().Type == DeviceTypes.kSocketCamC820)
-        {
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                var getStatus = await capture.GetSocketCamStatusAsync();
-                if (getStatus.Status == CaptureHelper.SocketCamStatus.Enable) selectedDevice.SetSocketCamOverlay();
-            });
-        }
-
         }
 
         private void Capture_DecodedData(object sender, CaptureHelper.DecodedDataArgs e)
