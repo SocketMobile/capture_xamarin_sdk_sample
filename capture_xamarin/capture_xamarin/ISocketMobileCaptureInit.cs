@@ -12,7 +12,7 @@ namespace capture_xamarin_sdk_sample
         void StartCaptureCore(string appId, string developerId, string appKey);
 
         void DeviceList_SelectedIndexChanged(Picker deviceList);
-        void DeviceList_Focused(Picker deviceList);
+        void Button_TriggerScan(CaptureHelperDevice device);
         void GetSocketCamStatusInit();
         void Switch_SocketCamStatus();
     }

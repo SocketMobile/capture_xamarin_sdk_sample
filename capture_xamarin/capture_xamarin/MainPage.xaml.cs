@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 using capture_xamarin_sdk_sample.Model;
 using SocketMobile.Capture;
 using Xamarin.Essentials;
@@ -67,17 +65,6 @@ namespace capture_xamarin_sdk_sample
             }
         }
 
-        private bool _isVisibleAndroid;
-        public bool IsVisibleAndroid
-        {
-            get => _isVisibleAndroid;
-            set
-            {
-                _isVisibleAndroid = value;
-                OnPropertyChanged(nameof(IsVisibleAndroid));
-            }
-        }
-
         private bool _isSocketCamEnable;
         public bool IsSocketCamEnable
         {
@@ -134,8 +121,6 @@ namespace capture_xamarin_sdk_sample
 
             }
 
-            IsVisibleAndroid = Device.RuntimePlatform == Device.Android || Device.RuntimePlatform == Device.iOS;
-
             if (Device.RuntimePlatform == Device.iOS)
             {
                 DependencyService.Get<ISocketMobileCaptureInit>().MainPage = this;
@@ -177,7 +162,7 @@ namespace capture_xamarin_sdk_sample
                                 DependencyService.Get<IWindowsCaptureExtension>().CallWindowsCaptureExtensionInit(capture.GetHandle(), appId, developerId, appKey);
                             }
 
-                            // (Android-iOS) Check if SocketCam is enabled to set the Switch
+                            // Check if SocketCam is enabled to set the Switch
                             GetSocketCamStatusInit();
                         }
                     }
@@ -246,7 +231,6 @@ namespace capture_xamarin_sdk_sample
                 {
                     Console.WriteLine("Error removing device from list: " + ex.ToString());
                 }
-                
             });
 
             SelectedDeviceText = "Selected Device: ";
@@ -275,45 +259,21 @@ namespace capture_xamarin_sdk_sample
 
         private void DeviceList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (deviceList.SelectedIndex != -1 && Device.RuntimePlatform == Device.iOS)
+            if (deviceList.SelectedIndex != -1)
             {
-                DependencyService.Get<ISocketMobileCaptureInit>().DeviceList_SelectedIndexChanged(deviceList);
-            }
+                if (Device.RuntimePlatform == Device.iOS)
+                {
+                    DependencyService.Get<ISocketMobileCaptureInit>().DeviceList_SelectedIndexChanged(deviceList);
+                }
+                else
+                {
+                    selectedDevice = deviceListItems[deviceList.SelectedIndex].DeviceObj;
+                    SelectedDeviceText = string.Format("Selected Device for Trigger Scan Button:\n{0}", selectedDevice.GetDeviceInfo().Name);
+                }
 
-            // Uncomment below if using Uwp or Android (Comment if using iOS)
-            //if (deviceList.SelectedIndex != -1)
-            //{
-            //    selectedDevice = deviceListItems[deviceList.SelectedIndex].DeviceObj;
-            //    SelectedDeviceText = string.Format("Selected Device for Trigger Scan Button:\n{0}", selectedDevice.GetDeviceInfo().Name);
-            //}
+            }
         }
 
-        private void DeviceList_Focused(object sender, FocusEventArgs e)
-        {
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                DependencyService.Get<ISocketMobileCaptureInit>().DeviceList_Focused(deviceList);
-            }
-
-            // Uncomment below if using Uwp or Android (Comment if using iOS)
-            //int i = 0;
-            //int index = -1;
-
-            //foreach (var item in deviceListItems)
-            //{
-            //    if (item.DeviceName == selectedDevice.GetDeviceInfo().Name)
-            //    {
-            //        index = i;
-            //        break;
-            //    }
-                
-            //    i++;
-            //}
-
-            //deviceList.SelectedIndex = index;
-        }
-
-        // (iOS only)
         private void DeviceList_Unfocused(object sender, FocusEventArgs e)
         {
             deviceList.SelectedIndex = -1;
@@ -321,10 +281,17 @@ namespace capture_xamarin_sdk_sample
 
         private void Button_TriggerScan(object sender, EventArgs e)
         {
-            selectedDevice?.SetTriggerStartAsync();
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                DependencyService.Get<ISocketMobileCaptureInit>().Button_TriggerScan(selectedDevice);
+            }
+            else
+            {
+                selectedDevice?.SetTriggerStartAsync();
+            }
         }
 
-        // (Android-iOS) Check if SocketCam is enabled to set the Switch
+        // Check if SocketCam is enabled to set the Switch
         private async void GetSocketCamStatusInit()
         {
             var getStatus = await capture.GetSocketCamStatusAsync();
@@ -333,7 +300,7 @@ namespace capture_xamarin_sdk_sample
                 IsSocketCamSwitchEnable = true;
             }
 
-            switch (getStatus.Status) 
+            switch (getStatus.Status)
             {
                 case CaptureHelper.SocketCamStatus.Enable:
                     IsSocketCamEnable = true;

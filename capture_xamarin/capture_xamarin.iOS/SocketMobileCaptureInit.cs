@@ -18,6 +18,14 @@ namespace capture_xamarin_sdk_sample.iOS
         public CaptureHelper capture = new CaptureHelper();
         public MainPage MainPage { get; set; }
 
+        private UIViewController _socketCamViewController;
+
+        // SocketCam view: position and dimensions (min = 250 x 250)
+        private int _socketCamXPos = 0;
+        private int _socketCamYPos = 0;
+        private int _socketCamWidth = 250;
+        private int _socketCamHeight = 250;
+
         public void StartCaptureCore(string appId, string developerId, string appKey)
         {
             capture.OpenAsync(appId, developerId, appKey)
@@ -78,18 +86,22 @@ namespace capture_xamarin_sdk_sample.iOS
 
             // Last device arrival is the new selected device
             MainPage.selectedDevice = e.CaptureDevice;
-
-            // Set SocketCam Overlay to display camera
-            MainThread.BeginInvokeOnMainThread(async () =>
-            {
-                var getStatus = await capture.GetSocketCamStatusAsync();
-                if (getStatus.Status == CaptureHelper.SocketCamStatus.Enable) await MainPage.selectedDevice.SetSocketCamOverlay();
-            });
         }
 
         private void Capture_DecodedData(object sender, CaptureHelper.DecodedDataArgs e)
         {
-            MainPage.DisplayText = string.Format("Decoded Data: {0}", e.DecodedData.DataToUTF8String);
+            if (SktErrors.SKTSUCCESS(e.Result))
+            {
+                MainPage.DisplayText = string.Format("Decoded Data: {0}", e.DecodedData.DataToUTF8String);
+            }
+
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                if (_socketCamViewController != null)
+                {
+                    _socketCamViewController.View.RemoveFromSuperview();
+                }
+            });
         }
         // --Device
 
@@ -103,28 +115,29 @@ namespace capture_xamarin_sdk_sample.iOS
             }
         }
 
-        public void DeviceList_Focused(Picker deviceList)
-        {
-            int i = 0;
-            int index = -1;
-
-            foreach (var item in MainPage.deviceListItems)
-            {
-                if (item.DeviceName == MainPage.selectedDevice.GetDeviceInfo().Name)
-                {
-                    index = i;
-                    break;
-                }
-
-                i++;
-            }
-
-            deviceList.SelectedIndex = index;
-        }
-
         public void Button_TriggerScan(CaptureHelperDevice device)
         {
-            device?.SetTriggerStartAsync();
+            device?.SetTriggerStartAsync().ContinueWith(result =>
+            {
+                // To use SocketCam on iOS get the returned object and use it as a View Controller
+                var resultDictionary = (NSDictionary)result.Result.ResultObject;
+                var resultType = (NSString)resultDictionary[NSObject.FromObject("SKTObjectType")];
+
+                if (resultType == "SKTSocketCamViewControllerType")
+                {
+                    _socketCamViewController = (UIViewController)resultDictionary[NSObject.FromObject("SKTSocketCamViewController")];
+
+                    if (_socketCamViewController != null)
+                    {
+                        MainThread.BeginInvokeOnMainThread(() =>
+                        {
+                            var currentViewController = Platform.GetCurrentUIViewController();
+                            _socketCamViewController.View.Frame = new CoreGraphics.CGRect(_socketCamXPos, _socketCamYPos, _socketCamWidth, _socketCamHeight);
+                            currentViewController.View.AddSubview(_socketCamViewController.View);
+                        });
+                    }
+                }
+            });
         }
 
         // (Android-iOS) Check if SocketCam is enabled to set the Switch

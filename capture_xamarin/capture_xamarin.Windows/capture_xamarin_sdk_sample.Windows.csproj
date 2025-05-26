@@ -151,7 +151,7 @@
       <Version>6.2.13</Version>
     </PackageReference>
     <PackageReference Include="SocketMobile.Capture">
-      <Version>1.7.11.744</Version>
+      <Version>1.7.54.884</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms">
       <Version>5.0.0.2478</Version>

@@ -19,7 +19,6 @@
                     ItemDisplayBinding="{Binding DeviceName}"
                     SelectedIndexChanged="DeviceList_SelectedIndexChanged"
                     Unfocused="DeviceList_Unfocused"
-                    Focused="DeviceList_Focused"
                     TitleColor="Gray"
                     HorizontalOptions="Center"/>
             </StackLayout>
@@ -41,14 +40,12 @@
                 <Label 
                     x:Name="switchLabel"
                     Text="Enable/Disable SocketCam"
-                    IsVisible="{Binding IsVisibleAndroid}"
                     VerticalOptions="Center"/>
                 <Switch 
                     x:Name="socketCamSwitch"
                     IsEnabled="{Binding IsSocketCamSwitchEnable}"
                     Toggled="Switch_SocketCamStatus"
-                    IsToggled="{Binding IsSocketCamEnable}"
-                    IsVisible="{Binding IsVisibleAndroid}"/>
+                    IsToggled="{Binding IsSocketCamEnable}"/>
             </StackLayout>
             <Button
                 Text="Trigger Scan"

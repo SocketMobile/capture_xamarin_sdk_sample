@@ -14,14 +14,13 @@ namespace capture_xamarin_sdk_sample.Windows
 {
     public class WindowsCaptureExtension : IWindowsCaptureExtension
     {
-        CaptureExtension captureExtension;
-        UserControl userControl;
+        CaptureExtension _captureExtension;
+        UserControl _userControl;
         public async void CallWindowsCaptureExtensionInit(int captureHandle, string appId, string developerId, string appKey)
         {
-            captureExtension = new CaptureExtension(MainPage.appContext, captureHandle, appId, developerId, appKey);
-            captureExtension.SocketCamView += Extension_SocketCamViewEvent;
-            captureExtension.Error += CaptureExtension_Error;
-            await captureExtension.Start();
+            _captureExtension = new CaptureExtension(MainPage.appContext, captureHandle, appId, developerId, appKey);
+            _captureExtension.Error += CaptureExtension_Error;
+            await _captureExtension.Start();
         }
 
         private void CaptureExtension_Error(object sender, CaptureExtensionErrorEventArgs e)
@@ -31,10 +30,8 @@ namespace capture_xamarin_sdk_sample.Windows
 
         private void Extension_SocketCamViewEvent(object sender, SocketCamViewEventArgs e)
         {
-            Debug.WriteLine($"----Extension_SocketCamViewEvent object: {e.SocketCamView}");
-
-            userControl = (UserControl)e.SocketCamView;
-            MainPage.DisplayUserControlView(userControl);
+            _userControl = (UserControl)e.SocketCamView;
+            MainPage.DisplayUserControlView(_userControl);
         }
     }
 }
